@@ -7,7 +7,8 @@ from typing import Optional
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+import jwt
+from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -59,7 +60,7 @@ async def get_current_user(
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-    except JWTError:
+    except InvalidTokenError:
         raise credentials_exception
 
     result = await db.execute(select(User).where(User.username == username))
@@ -72,7 +73,12 @@ async def get_current_user(
 def require_role(required_role: str):
     """Return a dependency that checks the user has the required role."""
     async def role_checker(current_user: User = Depends(get_current_user)):
-        if current_user.role != required_role:
+        # Normalize role check: 'admin' and 'manager' are equivalent managerial roles
+        allowed_roles = {required_role}
+        if required_role in ("admin", "manager"):
+            allowed_roles = {"admin", "manager"}
+
+        if current_user.role not in allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail=f"Access denied. Required role: {required_role}",

@@ -4,14 +4,38 @@ Pydantic schemas for strict request/response validation.
 
 from datetime import datetime
 from typing import Optional, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
-# ── Authentication ─────────────────────────────────────────────────
+# ── Authentication & Users ─────────────────────────────────────────
 
 class LoginRequest(BaseModel):
     username: str = Field(..., min_length=1, max_length=50, description="Username")
     password: str = Field(..., min_length=1, max_length=128, description="Password")
+
+
+class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    id: int
+    username: str
+    role: str
+    created_at: datetime
+
+
+class RegisterRequest(BaseModel):
+    username: str = Field(..., min_length=3, max_length=50, description="Username (at least 3 characters)")
+    password: str = Field(..., min_length=6, max_length=128, description="Password (at least 6 characters)")
+    role: str = Field("operator", description="Role: 'operator' or 'manager' / 'admin'")
+
+
+class RegisterResponse(BaseModel):
+    message: str
+    access_token: str
+    token_type: str = "bearer"
+    role: str
+    username: str
+    user: UserResponse
 
 
 class TokenResponse(BaseModel):
@@ -30,6 +54,8 @@ class AssetCreate(BaseModel):
 
 
 class AssetResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     name: str
     serial_number: str
@@ -37,9 +63,6 @@ class AssetResponse(BaseModel):
     location: str
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class StatusUpdate(BaseModel):
@@ -57,6 +80,8 @@ class StatusUpdateResponse(BaseModel):
 # ── Audit Log ──────────────────────────────────────────────────────
 
 class AuditLogResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     asset_id: int
     action: str
@@ -67,12 +92,11 @@ class AuditLogResponse(BaseModel):
     changed_by: str
     changed_at: datetime
 
-    class Config:
-        from_attributes = True
-
 
 class AssetDetailResponse(BaseModel):
     """Asset with full audit history."""
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     name: str
     serial_number: str
@@ -81,6 +105,3 @@ class AssetDetailResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     audit_logs: List[AuditLogResponse] = []
-
-    class Config:
-        from_attributes = True
