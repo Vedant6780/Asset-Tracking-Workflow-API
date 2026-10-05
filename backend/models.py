@@ -16,7 +16,7 @@ class User(Base):
     username = Column(String(50), unique=True, nullable=False, index=True)
     hashed_password = Column(String(255), nullable=False)
     role = Column(String(20), nullable=False, default="operator")  # "admin" or "operator"
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
 
 class Asset(Base):
@@ -28,8 +28,8 @@ class Asset(Base):
     serial_number = Column(String(50), unique=True, nullable=False, index=True)
     status = Column(String(50), nullable=False, default="Registered")
     location = Column(String(100), nullable=False, default="Unknown")
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc),
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
                         onupdate=lambda: datetime.now(timezone.utc))
 
     # Relationship
@@ -48,7 +48,7 @@ class AuditLog(Base):
     old_location = Column(String(100), nullable=True)
     new_location = Column(String(100), nullable=True)
     changed_by = Column(String(50), nullable=False)
-    changed_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    changed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationship
     asset = relationship("Asset", back_populates="audit_logs")

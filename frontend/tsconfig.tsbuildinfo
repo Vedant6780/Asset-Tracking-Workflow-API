@@ -1,0 +1,1 @@
+{"root":["./src/env.d.ts","./src/config/env.ts","./src/context/authcontext.tsx","./src/services/apiclient.ts","./src/services/assetservice.ts","./src/services/authservice.ts","./src/types/assets.ts","./src/types/auth.ts"],"version":"5.9.3"}

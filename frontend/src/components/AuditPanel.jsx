@@ -54,7 +54,7 @@ export default function AuditPanel({ assetId, onClose }) {
                         <div className="audit-panel-header">
                             <div>
                                 <h2>{asset.name}</h2>
-                                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>
+                                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>
                                     {asset.serial_number}
                                 </span>
                             </div>
@@ -62,7 +62,7 @@ export default function AuditPanel({ assetId, onClose }) {
                         </div>
 
                         {/* Current Status */}
-                        <div style={{ marginBottom: 'var(--space-xl)', padding: 'var(--space-md)', background: 'var(--bg-glass)', borderRadius: 'var(--radius-md)' }}>
+                        <div style={{ marginBottom: 'var(--space-xl)', padding: 'var(--space-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}>
                             <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
                                 Current Status
                             </div>

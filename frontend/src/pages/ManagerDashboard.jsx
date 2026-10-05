@@ -1,6 +1,6 @@
 /**
- * ManagerDashboard — Live Operations Center for logistics managers.
- * Features: asset table, WebSocket live updates, stat cards, audit side-panel.
+ * ManagerDashboard — Live operations center for logistics managers.
+ * Real-time asset table with WebSocket updates, stat cards, and audit side panel.
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -37,12 +37,11 @@ export default function ManagerDashboard() {
         }
     }, []);
 
-    // Connect WebSocket
+    // WebSocket for live updates
     useEffect(() => {
         fetchAssets();
 
         wsRef.current = createDashboardSocket(
-            // onMessage
             (data) => {
                 if (data.event === 'status_update') {
                     setAssets((prev) =>
@@ -73,9 +72,7 @@ export default function ManagerDashboard() {
                     setAssets((prev) => prev.filter((a) => a.id !== data.asset_id));
                 }
             },
-            // onOpen
             () => setWsConnected(true),
-            // onClose
             () => setWsConnected(false)
         );
 
@@ -98,75 +95,115 @@ export default function ManagerDashboard() {
         setSelectedAssetId(null);
     };
 
-    // Stats
+    // Compute stats
     const stats = {
         total: assets.length,
         inTransit: assets.filter((a) => a.status === 'In Transit').length,
+        inWarehouse: assets.filter((a) => a.status === 'In Warehouse' || a.status === 'Registered').length,
         delivered: assets.filter((a) => a.status === 'Delivered').length,
-        maintenance: assets.filter((a) => a.status === 'Under Maintenance' || a.status === 'Damaged').length,
+        attention: assets.filter((a) => a.status === 'Under Maintenance' || a.status === 'Damaged').length,
     };
 
     return (
         <div className="manager-layout">
             <div className="animated-bg" />
 
-            {/* Header */}
+            {/* Navbar */}
             <header className="page-header">
-                <h1>🏢 Live Operations Center</h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '1.35rem' }}>🚛</span>
+                    <div>
+                        <h1 style={{ margin: 0, fontSize: '1.1rem' }}>FleetTrack OS</h1>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                            Fleet Operations Center
+                        </span>
+                    </div>
+                </div>
+
                 <div className="header-actions">
                     <LiveIndicator connected={wsConnected} />
                     <div className="user-badge">
-                        {username}
+                        <span style={{ color: 'var(--text-light)' }}>Manager:</span>
+                        <strong>{username}</strong>
                         <span className="role-tag role-admin">Admin</span>
                     </div>
-                    <button className="btn btn-ghost" onClick={handleLogout}>
-                        Logout
+                    <button className="btn btn-ghost" onClick={fetchAssets} title="Refresh data">
+                        🔄 Refresh
+                    </button>
+                    <button className="btn btn-ghost" onClick={handleLogout} title="Sign out">
+                        Sign Out
                     </button>
                 </div>
             </header>
 
-            {/* Main Content */}
+            {/* Main */}
             <main className="manager-main">
-                {/* Stats Grid */}
+                {/* Stat Cards */}
                 <div className="stats-grid">
-                    <div className="glass-card stat-card">
+                    <div className="stat-card">
                         <div className="stat-value">{stats.total}</div>
                         <div className="stat-label">Total Assets</div>
                     </div>
-                    <div className="glass-card stat-card">
-                        <div className="stat-value" style={{ background: 'linear-gradient(135deg, var(--accent-yellow), var(--accent-orange))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    <div className="stat-card">
+                        <div className="stat-value" style={{ color: 'var(--amber)' }}>
                             {stats.inTransit}
                         </div>
-                        <div className="stat-label">In Transit</div>
+                        <div className="stat-label">🚚 In Transit</div>
                     </div>
-                    <div className="glass-card stat-card">
-                        <div className="stat-value" style={{ background: 'linear-gradient(135deg, var(--accent-green), #059669)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    <div className="stat-card">
+                        <div className="stat-value" style={{ color: 'var(--purple)' }}>
+                            {stats.inWarehouse}
+                        </div>
+                        <div className="stat-label">📦 In Warehouse</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-value" style={{ color: 'var(--green)' }}>
                             {stats.delivered}
                         </div>
-                        <div className="stat-label">Delivered</div>
+                        <div className="stat-label">✅ Delivered</div>
                     </div>
-                    <div className="glass-card stat-card">
-                        <div className="stat-value" style={{ background: 'linear-gradient(135deg, var(--accent-red), var(--accent-orange))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                            {stats.maintenance}
+                    <div className="stat-card">
+                        <div className="stat-value" style={{ color: stats.attention > 0 ? 'var(--red)' : 'var(--text-light)' }}>
+                            {stats.attention}
                         </div>
-                        <div className="stat-label">Needs Attention</div>
+                        <div className="stat-label">⚠️ Needs Attention</div>
                     </div>
                 </div>
 
-                {/* Asset Table */}
+                {/* Table Header */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                    <div>
+                        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>Active Shipments</h2>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '2px 0 0' }}>
+                            Click any row to view its full audit history.
+                        </p>
+                    </div>
+                    <span style={{
+                        fontSize: '0.76rem',
+                        color: 'var(--text-muted)',
+                        background: '#ffffff',
+                        padding: '5px 12px',
+                        borderRadius: 'var(--r-sm)',
+                        border: '1px solid var(--border)'
+                    }}>
+                        🟢 Real-time updates active
+                    </span>
+                </div>
+
+                {/* Table */}
                 {loading ? (
-                    <div className="loading-container">
+                    <div className="loading-container glass-card" style={{ padding: '3rem' }}>
                         <div className="spinner" />
-                        <span>Loading assets...</span>
+                        <span>Loading fleet data...</span>
                     </div>
                 ) : (
-                    <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+                    <div className="table-container">
                         <AssetTable assets={assets} flashId={flashId} onRowClick={handleRowClick} />
                     </div>
                 )}
             </main>
 
-            {/* Audit Side Panel */}
+            {/* Audit Panel */}
             {selectedAssetId && (
                 <AuditPanel assetId={selectedAssetId} onClose={handleCloseAudit} />
             )}

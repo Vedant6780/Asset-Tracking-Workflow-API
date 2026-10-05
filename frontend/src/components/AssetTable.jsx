@@ -45,9 +45,9 @@ export default function AssetTable({ assets, flashId, onRowClick }) {
                         onClick={() => onRowClick(asset.id)}
                         style={{ cursor: 'pointer' }}
                     >
-                        <td style={{ fontWeight: 600, color: 'var(--accent-blue)' }}>#{asset.id}</td>
+                        <td style={{ fontWeight: 600, color: 'var(--blue)' }}>#{asset.id}</td>
                         <td>{asset.name}</td>
-                        <td style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>{asset.serial_number}</td>
+                        <td style={{ fontFamily: "'JetBrains Mono', monospace", letterSpacing: '1px' }}>{asset.serial_number}</td>
                         <td><StatusBadge status={asset.status} /></td>
                         <td>{asset.location}</td>
                         <td style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{formatDate(asset.updated_at)}</td>

@@ -16,9 +16,15 @@ function ProtectedRoute({ children, requiredRole }) {
     return <Navigate to="/" replace />;
   }
 
-  if (requiredRole && role !== requiredRole) {
-    // Redirect to appropriate dashboard
-    return <Navigate to={role === 'admin' ? '/manager' : '/operator'} replace />;
+  const isManager = role === 'admin' || role === 'manager';
+  const isOperator = role === 'operator';
+
+  if (requiredRole === 'admin' && !isManager) {
+    return <Navigate to="/operator" replace />;
+  }
+
+  if (requiredRole === 'operator' && !isOperator) {
+    return <Navigate to="/manager" replace />;
   }
 
   return children;

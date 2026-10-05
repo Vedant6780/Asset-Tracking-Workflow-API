@@ -17,6 +17,7 @@ async def websocket_dashboard(websocket: WebSocket, token: str = Query(None)):
     WebSocket endpoint for the manager dashboard.
     Validates JWT from query param before accepting the connection.
     """
+
     # Validate token
     if not token:
         await websocket.close(code=4001, reason="Missing authentication token")
@@ -26,8 +27,8 @@ async def websocket_dashboard(websocket: WebSocket, token: str = Query(None)):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         role = payload.get("role")
         username = payload.get("sub")
-        if role != "admin":
-            await websocket.close(code=4003, reason="Admin access required")
+        if role not in ("admin", "manager"):
+            await websocket.close(code=4003, reason="Admin or Manager access required")
             return
     except JWTError:
         await websocket.close(code=4001, reason="Invalid authentication token")
