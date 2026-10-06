@@ -44,7 +44,7 @@ If Docker is giving issues or you want more control:
 **Option A: Using Docker**
 ```powershell
 docker run -d `
-  --name fleettrack_postgres `
+  --name workflowapi-db `
   -e POSTGRES_DB=asset_tracking `
   -e POSTGRES_USER=postgres `
   -e POSTGRES_PASSWORD=postgres `

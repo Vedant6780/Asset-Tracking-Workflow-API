@@ -3,7 +3,8 @@ WebSocket Router — live dashboard connection endpoint.
 """
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
-from jose import JWTError, jwt
+import jwt
+from jwt.exceptions import InvalidTokenError
 
 from config import SECRET_KEY, ALGORITHM
 from websocket_manager import manager
@@ -30,7 +31,7 @@ async def websocket_dashboard(websocket: WebSocket, token: str = Query(None)):
         if role not in ("admin", "manager"):
             await websocket.close(code=4003, reason="Admin or Manager access required")
             return
-    except JWTError:
+    except InvalidTokenError:
         await websocket.close(code=4001, reason="Invalid authentication token")
         return
 

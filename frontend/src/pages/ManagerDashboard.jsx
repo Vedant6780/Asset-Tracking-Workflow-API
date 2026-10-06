@@ -125,7 +125,7 @@ export default function ManagerDashboard() {
                     <div className="user-badge">
                         <span style={{ color: 'var(--text-light)' }}>Manager:</span>
                         <strong>{username}</strong>
-                        <span className="role-tag role-admin">Admin</span>
+                        <span className="role-tag role-admin">Manager</span>
                     </div>
                     <button className="btn btn-ghost" onClick={fetchAssets} title="Refresh data">
                         🔄 Refresh

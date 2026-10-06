@@ -1,201 +1,276 @@
-# 🚛 FleetTrack OS - Real-Time Asset Tracking & Workflow API
+# 🚛 FleetTrack OS — Real-Time Asset Tracking & Workflow API
 
-A premium, real-time asset tracking and freight dispatch dashboard for enterprise logistics operations. This application provides instant status updates, role-based access control, and live WebSocket synchronization for warehouse operations and fleet management.
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-19.2+-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-7.3+-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## ✅ Latest Updates
+An enterprise-grade, real-time asset tracking and freight dispatch management platform. Built with **FastAPI**, **PostgreSQL (Asyncpg)**, **React 19**, and **WebSockets**, FleetTrack OS connects warehouse floor operations directly to executive logistics command with sub-second synchronization and an immutable audit trail.
 
-**All authentication and registration features have been fully implemented and tested!**
+---
 
-- ✅ User registration with role selection (Manager/Operator)
-- ✅ Login with database validation
-- ✅ PostgreSQL integration with encrypted passwords (bcrypt)
-- ✅ JWT-based authentication
-- ✅ Real-time WebSocket updates
-- ✅ Premium FleetTrack OS branding
-- ✅ Deployment-ready with Docker
+## 🌟 Key Features
+
+- **⚡ Real-Time WebSocket Telemetry**: Immediate broadcast of asset creation, status transitions, and deletions to connected manager dashboards without page reloads.
+- **🛡️ Role-Based Access Control (RBAC)**:
+  - **Fleet Operations Manager**: Full CRUD permissions, system metrics, real-time activity stream, and full historical audit logs.
+  - **Warehouse Scanner Operator**: Optimized floor-terminal interface for rapid barcode/serial lookup and status dispatching.
+- **📜 Immutable Audit Trail**: Every status transition records the previous state, new state, physical location, actor username, and UTC timestamp.
+- **🔐 Enterprise Authentication**: Secure user registration, bcrypt-hashed passwords (cost factor 12), and role-signed JSON Web Tokens (PyJWT).
+- **🎨 Glassmorphic Dark UI**: Custom-built design system with modern typography, glowing status indicators, smooth micro-animations, and zero utility-framework bloat.
+- **🐳 Full Containerization**: One-command multi-container deployment orchestrating PostgreSQL with health checks, FastAPI backend, and Nginx frontend.
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    subgraph Frontend ["Frontend (React 19 + Vite)"]
+        A[Warehouse Operator Scanner] -->|REST API / Token Auth| C[FastAPI Gateway]
+        B[Fleet Operations Manager] -->|REST API / Token Auth| C
+        B -->|WebSocket Live Stream| WS[WebSocket Manager]
+    end
+
+    subgraph Backend ["Backend (FastAPI + SQLAlchemy 2.0 Async)"]
+        C --> D[Auth Router & RBAC Middleware]
+        C --> E[Asset Router]
+        E --> WS
+        D --> DB[(PostgreSQL Database)]
+        E --> DB
+    end
+
+    subgraph Storage ["PostgreSQL 15"]
+        DB --> U[Users Table]
+        DB --> AS[Assets Table]
+        DB --> AL[Audit Logs Table]
+    end
+```
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology | Details |
+|---|---|---|
+| **Backend Framework** | **FastAPI 0.115** | High-throughput asynchronous REST & WebSocket server |
+| **Database Engine** | **PostgreSQL 15** | Relational persistence with async connection pooling |
+| **Async ORM** | **SQLAlchemy 2.0** | Non-blocking async ORM queries with `asyncpg` driver |
+| **Authentication** | **PyJWT + Passlib** | Role-claims signed JWTs + bcrypt password hashing |
+| **Frontend Framework**| **React 19** | Concurrent UI rendering with component architecture |
+| **Build Tool** | **Vite 7** | Sub-second HMR and optimized production bundles |
+| **Routing** | **React Router 7** | Client-side routing with protected RBAC guards |
+| **Styling** | **Custom CSS** | Premium glassmorphism design system & micro-animations |
+| **Containerization** | **Docker & Docker Compose** | Multi-service stack with automated database healthchecks |
+
+---
 
 ## 🚀 Quick Start
 
 ### Option 1: Docker Compose (Recommended)
-```powershell
-# Start Docker Desktop first, then:
-cd "d:\workflow API"
+
+1. Ensure **Docker Desktop** is running.
+2. In the project root directory, run:
+
+```bash
 docker-compose up --build
 ```
 
-**Access:**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Docs: http://localhost:8000/docs
-
-### Option 2: Quick Start Script
-```powershell
-cd "d:\workflow API"
-.\start.ps1
-```
-
-### Option 3: Manual Start
-See detailed instructions in [START_APPLICATION.md](./START_APPLICATION.md)
-
-## 🎯 Features
-
-- **User Registration & Authentication**: New users can register with role selection, passwords encrypted with bcrypt, JWT-based authentication.
-- **Real-Time Dashboard**: Logistics managers get a live, auto-updating dashboard via WebSockets.
-- **Role-Based Access Control (RBAC)**: Warehouse operators can scan/input asset IDs to update statuses, while managers have full CRUD access.
-- **Immutable Audit Trail**: Every status change is comprehensively logged with the user and timestamp.
-- **Premium UI/UX**: FleetTrack OS branding with glassmorphism design, dark gradients, and micro-animations.
-- **PostgreSQL Database**: Production-ready database with async operations and connection pooling.
-
-## 🛠️ Technology Stack
-
-### Backend
-- **FastAPI**: High-performance Python web framework with native async and WebSocket support.
-- **PostgreSQL**: Production-ready relational database with asyncpg for async operations.
-- **SQLAlchemy (Async)**: Modern async ORM with Pydantic v2 integration.
-- **PyJWT**: Industry-standard JWT authentication library.
-- **passlib + bcrypt**: Secure password hashing with bcrypt (cost factor 12).
-
-### Frontend
-- **React 19**: Component-based UI with efficient re-renders for real-time data.
-- **Vite 7**: Next-generation, lightning-fast build tool.
-- **React Router**: Client-side routing with protected, role-aware routes.
-- **Custom CSS**: FleetTrack OS design system with glassmorphism and CSS animations.
-
-## 🏃‍♂️ Detailed Setup Instructions
-
-For comprehensive setup, troubleshooting, and testing instructions, see:
-- **[START_APPLICATION.md](./START_APPLICATION.md)** - Complete startup guide
-- **[VERIFICATION_CHECKLIST.md](./VERIFICATION_CHECKLIST.md)** - Testing checklist
-- **[COMPLETED_WORK.md](./COMPLETED_WORK.md)** - Summary of all changes
-- **[INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md)** - Lovable frontend integration
-
-### Prerequisites
-- Docker Desktop (for Docker Compose method)
-- Python 3.10+ (for manual backend)
-- Node.js 18+ (for manual frontend)
-- PostgreSQL 15+ (for manual database)
-
-### Manual Backend Setup
-```bash
-cd backend
-python -m venv venv
-
-# Activate virtual environment (Windows)
-.\venv\Scripts\activate
-
-pip install -r requirements.txt
-
-# Seed the database (creates tables and default users)
-python seed.py
-
-# Start the server
-python -m uvicorn main:app --reload --port 8000
-```
-*Backend available at `http://localhost:8000`. API docs at `http://localhost:8000/docs`.*
-
-### Manual Frontend Setup
-```bash
-cd frontend
-npm install
-npm run dev
-```
-*React app available at `http://localhost:3000`.*
-
-## 🔐 Demo Credentials
-
-Default users created by `seed.py`:
-
-| Role | Username | Password | Dashboard |
-|------|----------|----------|-----------|
-| **Manager** | `admin` | `admin123` | Fleet Operations Center |
-| **Operator** | `operator` | `operator123` | Warehouse Scanner Terminal |
-
-**You can also register new accounts** directly from the login page:
-1. Visit http://localhost:3000
-2. Click "Create Account"
-3. Choose role (Manager or Operator)
-4. Enter username and password
-5. Click "Create Account"
-
-## 🧪 Testing the Application
-
-### Quick Test Sequence:
-1. **Health Check**: `curl http://localhost:8000/`
-2. **Register New User**: Use the login page
-3. **Login**: Test authentication
-4. **Operator Flow**: Lookup and update assets
-5. **Manager Dashboard**: View real-time updates
-6. **WebSocket**: Check "Live" indicator is green
-
-See [VERIFICATION_CHECKLIST.md](./VERIFICATION_CHECKLIST.md) for complete testing guide.
-
-## 📊 Application Structure
-
-```
-FleetTrack OS/
-├── 🚛 Login Page (Role Selection)
-│   ├── Sign In / Create Account toggle
-│   ├── Manager or Operator role selection
-│   └── Premium dark gradient design
-│
-├── 👔 Manager Dashboard (Fleet Operations Center)
-│   ├── Real-time asset table
-│   ├── WebSocket live updates
-│   ├── Audit panel (right side)
-│   └── Full CRUD permissions
-│
-└── 👷 Operator Dashboard (Warehouse Scanner Terminal)
-    ├── Asset lookup by code
-    ├── Status update functionality
-    └── Simplified warehouse-floor UI
-```
-
-## 📚 Documentation
-
-- **[START_APPLICATION.md](./START_APPLICATION.md)** - Complete startup guide with troubleshooting
-- **[VERIFICATION_CHECKLIST.md](./VERIFICATION_CHECKLIST.md)** - Testing checklist and success criteria
-- **[COMPLETED_WORK.md](./COMPLETED_WORK.md)** - Summary of all implemented features
-- **[INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md)** - Lovable frontend integration guide
-- **[PROJECT_DOCUMENTATION.md](./PROJECT_DOCUMENTATION.md)** - Comprehensive architecture documentation
-
-## 🔧 Troubleshooting
-
-Common issues and solutions:
-
-**Docker won't start**: Ensure Docker Desktop is running
-**Port conflicts**: Check if ports 3000, 5432, 8000 are available
-**CORS errors**: Verify backend is running on port 8000
-**WebSocket not connecting**: Check JWT token validity and "Live" indicator
-**Login fails**: Verify user was registered successfully
-
-See [START_APPLICATION.md](./START_APPLICATION.md) for detailed troubleshooting.
-
-## 🚀 Deployment
-
-### Environment Variables:
-```bash
-# Backend
-DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/dbname
-SECRET_KEY=your-production-secret-key
-FRONTEND_ORIGINS=https://yourdomain.com,https://app.yourdomain.com
-
-# Frontend
-VITE_API_URL=https://api.yourdomain.com
-```
-
-### Production Checklist:
-- [ ] Change SECRET_KEY to secure random value
-- [ ] Update default admin credentials
-- [ ] Enable HTTPS/SSL
-- [ ] Configure proper CORS origins
-- [ ] Set up database backups
-- [ ] Configure nginx for SPA routing
-- [ ] Enable rate limiting
-
-## 📝 License
-
-This project is for demonstration and educational purposes.
+3. Access the services:
+   - **Frontend Dashboard**: [http://localhost:3000](http://localhost:3000)
+   - **Backend API**: [http://localhost:8000](http://localhost:8000)
+   - **Interactive API Docs (Swagger UI)**: [http://localhost:8000/docs](http://localhost:8000/docs)
+   - **ReDoc Documentation**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ---
 
-**Built with ❤️ for logistics professionals who walk the warehouse floor.**
+### Option 2: Local Development Setup
+
+#### Prerequisites
+- **Python 3.10+**
+- **Node.js 18+ & npm**
+- **PostgreSQL 15+** running locally (or via Docker container)
+
+#### Step 1: Start PostgreSQL Database
+```powershell
+# Using Docker for the database only:
+docker run -d `
+  --name workflowapi-db `
+  -e POSTGRES_DB=asset_tracking `
+  -e POSTGRES_USER=postgres `
+  -e POSTGRES_PASSWORD=postgres `
+  -p 5432:5432 `
+  postgres:15-alpine
+```
+
+#### Step 2: Backend Setup
+```powershell
+cd backend
+
+# Create & activate virtual environment (Windows PowerShell)
+python -m venv venv
+.\venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run seed script (creates tables & initial demo records)
+python seed.py
+
+# Launch FastAPI development server
+python -m uvicorn main:app --reload --port 8000
+```
+
+#### Step 3: Frontend Setup
+```powershell
+cd ..\frontend
+
+# Install node dependencies
+npm install
+
+# Start Vite development server
+npm run dev
+```
+
+*The frontend will run at `http://localhost:5173` (or `http://localhost:3000` via Docker).*
+
+---
+
+## 🔐 Demo Credentials
+
+The database seeder automatically configures the following default accounts:
+
+| Role | Username | Password | Default View | Capabilities |
+|---|---|---|---|---|
+| **Fleet Manager** | `admin` | `admin123` | Fleet Operations Center | Full CRUD, Live WS feed, Audit Logs, Analytics |
+| **Warehouse Operator** | `operator` | `operator123` | Scanner Terminal | Serial Lookup, Status Transitions, Location updates |
+
+> 💡 **Self-Registration**: You can also create brand-new accounts directly from the login interface by selecting **"Create Account"**, choosing your desired role (**Manager** or **Operator**), and signing in immediately.
+
+---
+
+## 📡 API Reference
+
+### Authentication Endpoints (`/api/v1/auth`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `POST` | `/api/v1/auth/register` | Public | Register new Operator or Manager account |
+| `POST` | `/api/v1/auth/login` | Public | Authenticate user and receive Bearer JWT |
+| `GET` | `/api/v1/auth/me` | Authenticated | Retrieve authenticated user profile |
+
+### Asset Management Endpoints (`/api/v1/assets`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/api/v1/assets/` | Manager | Retrieve all assets ordered by latest update |
+| `POST` | `/api/v1/assets/` | Manager | Register a new asset into tracking system |
+| `GET` | `/api/v1/assets/{id}` | Manager | Get asset details including complete audit history |
+| `PUT` | `/api/v1/assets/{id}/status` | All Roles | Update asset status/location (triggers audit log & WS event) |
+| `GET` | `/api/v1/assets/lookup/{serial}` | All Roles | Rapid serial number lookup for warehouse scanners |
+| `DELETE` | `/api/v1/assets/{id}` | Manager | Remove an asset from the system |
+
+### WebSocket Real-Time Channel (`/api/v1/ws`)
+| Protocol | Endpoint | Access | Description |
+|---|---|---|---|
+| `WS` | `/api/v1/ws/dashboard?token={JWT}` | Manager | Live stream of `status_update`, `asset_created`, and `asset_deleted` events |
+
+---
+
+## 📁 Repository Structure
+
+```
+workflow API/
+├── backend/                       # FastAPI asynchronous application
+│   ├── routers/
+│   │   ├── auth_router.py         # Login, registration, profile retrieval
+│   │   ├── asset_router.py        # Asset CRUD, status dispatch, lookup
+│   │   └── ws_router.py           # WebSocket dashboard streaming
+│   ├── auth.py                    # JWT handling, hashing, and role checks
+│   ├── config.py                  # Application configuration & allowed statuses
+│   ├── database.py                # Async SQLAlchemy engine & session factory
+│   ├── main.py                    # App entry point, CORS, and lifecycle seeder
+│   ├── models.py                  # SQLAlchemy models: User, Asset, AuditLog
+│   ├── schemas.py                 # Pydantic v2 validation schemas
+│   ├── seed.py                    # Database seeding script
+│   ├── websocket_manager.py       # WebSocket connection management
+│   ├── requirements.txt           # Python package dependencies
+│   └── Dockerfile                 # Backend container definition
+│
+├── frontend/                      # React 19 + Vite client application
+│   ├── src/
+│   │   ├── components/            # AssetTable, AuditPanel, LiveIndicator, StatusBadge
+│   │   ├── context/               # AuthContext state management
+│   │   ├── pages/
+│   │   │   ├── LoginPage.jsx      # Glassmorphic auth portal with tabbed switcher
+│   │   │   ├── ManagerDashboard.jsx # Executive fleet operations control room
+│   │   │   └── OperatorDashboard.jsx # Warehouse floor scanning terminal
+│   │   ├── api.js                 # Axios API client & WebSocket factory
+│   │   ├── index.css              # Custom design system styles & animations
+│   │   ├── App.jsx                # Routing & RBAC route protection
+│   │   └── main.jsx               # Application DOM bootstrap
+│   ├── package.json               # Frontend dependencies & scripts
+│   ├── vite.config.js             # Vite development server configuration
+│   └── Dockerfile                 # Multi-stage production Nginx container
+│
+├── database/                      # Database configuration
+│   ├── init.sql                   # SQL schema initialization
+│   └── Dockerfile                 # Custom PostgreSQL image
+│
+├── docker-compose.yml             # Orchestration for DB, backend, & frontend
+├── START_APPLICATION.md           # In-depth startup and testing walkthrough
+├── PROJECT_DOCUMENTATION.md       # Full architectural breakdown & rationale
+└── README.md                      # Project overview and quick start guide
+```
+
+---
+
+## ⚙️ Environment Variables
+
+### Backend Configuration
+| Variable | Default | Purpose |
+|---|---|---|
+| `DATABASE_URL` | `postgresql+asyncpg://postgres:postgres@localhost:5432/asset_tracking` | Async SQLAlchemy DB connection URI |
+| `SECRET_KEY` | `super-secret-key-change-in-production-env` | Cryptographic key for signing JWT tokens |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | `480` (8 hours) | Token lifespan |
+
+### Frontend Configuration
+| Variable | Default | Purpose |
+|---|---|---|
+| `VITE_API_URL` | `http://localhost:8000` | Backend base URL for REST and WebSocket connections |
+
+---
+
+## 🔍 Verification & Testing
+
+Verify end-to-end functionality using the following workflow:
+
+1. **Service Health Check**:
+   ```bash
+   curl http://localhost:8000/
+   # Response: {"status":"healthy","service":"Asset Tracking API","version":"1.0.0"}
+   ```
+2. **Operator Flow**:
+   - Log in as `operator` / `operator123`.
+   - Enter serial number `SN-9982` into the scanner terminal.
+   - Change status to `In Transit` with location `Dock 4`.
+   - Confirm status update notification.
+3. **Manager Dashboard Flow**:
+   - Open a separate browser window or tab and log in as `admin` / `admin123`.
+   - Confirm the green **LIVE** pulse indicator is connected.
+   - Observe that `SN-9982` reflects `In Transit` at `Dock 4` in real time without refreshing.
+   - Click the asset to inspect the immutable audit log entry created by `operator`.
+
+---
+
+## 📖 Additional Documentation
+
+For more in-depth technical documentation, refer to:
+- **[START_APPLICATION.md](file:///d:/workflow%20API/START_APPLICATION.md)** — Comprehensive startup manual, detailed CLI procedures, and troubleshooting instructions.
+- **[PROJECT_DOCUMENTATION.md](file:///d:/workflow%20API/PROJECT_DOCUMENTATION.md)** — Architectural design deep-dive, database schema specifications, and rationale.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License — see the LICENSE file for details.

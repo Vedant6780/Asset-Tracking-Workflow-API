@@ -197,37 +197,23 @@ export default function LoginPage() {
                     {/* Role Selection */}
                     <div className="role-selection-wrapper">
                         <label className="field-label">
-                            {mode === 'login' ? 'Select your role' : 'Choose account type'}
+                            {mode === 'login' ? 'Select role' : 'Account type'}
                         </label>
-                        <div className="role-grid">
+                        <div className="role-btn-group">
                             <button
                                 type="button"
-                                className={`role-card-btn ${selectedRole === 'operator' ? 'selected' : ''}`}
+                                className={`role-select-btn ${selectedRole === 'operator' ? 'active' : ''}`}
                                 onClick={() => setSelectedRole('operator')}
                             >
-                                <div className="role-card-header">
-                                    <span className="role-emoji">📦</span>
-                                    <span className="role-name">Operator</span>
-                                </div>
-                                <p className="role-desc">Scan barcodes, check-in parcels & update shipment status</p>
-                                {selectedRole === 'operator' && (
-                                    <span className="role-check-indicator">✓</span>
-                                )}
+                                Operator
                             </button>
 
                             <button
                                 type="button"
-                                className={`role-card-btn ${selectedRole === 'manager' ? 'selected' : ''}`}
+                                className={`role-select-btn ${selectedRole === 'manager' ? 'active' : ''}`}
                                 onClick={() => setSelectedRole('manager')}
                             >
-                                <div className="role-card-header">
-                                    <span className="role-emoji">📊</span>
-                                    <span className="role-name">Manager</span>
-                                </div>
-                                <p className="role-desc">Fleet overview, audit logs & real-time transport monitoring</p>
-                                {selectedRole === 'manager' && (
-                                    <span className="role-check-indicator">✓</span>
-                                )}
+                                Manager
                             </button>
                         </div>
                     </div>
@@ -514,72 +500,15 @@ export default function LoginPage() {
             </div>
 
             {/* ═══════════════════════════════════════════════
-                RIGHT: Transport truck hero image
+                RIGHT: Transport truck photo
                 ═══════════════════════════════════════════════ */}
             <div className="auth-right-pane">
                 <div
                     className="truck-hero-bg"
                     style={{ backgroundImage: `url(${truckImage})` }}
                     role="img"
-                    aria-label="Transport freight truck on highway at sunrise"
-                >
-                    <div className="truck-hero-gradient" />
-                </div>
-
-                <div className="truck-overlay-content">
-                    {/* Top pill */}
-                    <div className="fleet-live-pill">
-                        <span className="live-pulse-dot" />
-                        <span className="live-text">Fleet Operations Online • 14 Regional Hubs</span>
-                    </div>
-
-                    {/* Bottom card */}
-                    <div className="fleet-hero-card">
-                        <div className="human-touch-card">
-                            <div className="human-touch-icon">✨</div>
-                            <div className="human-touch-title">FleetTrack OS</div>
-                            <div className="human-touch-text">
-                                Designed with care by logistics pros who actually walk the warehouse floor — because great software starts with real workflows, not abstract grids.
-                            </div>
-                        </div>
-                        <div className="fleet-badge">FREIGHT DISPATCH & SCANNING</div>
-                        <h2 className="fleet-hero-title">
-                            Precision Tracking for Every Mile & Checkpoint.
-                        </h2>
-                        <p className="fleet-hero-subtitle">
-                            Real-time sync between dock operators and regional managers —
-                            instant scan confirmations, transit updates, and tamper-proof audit trails.
-                        </p>
-
-                        <div className="fleet-metrics-grid">
-                            <div className="metric-box">
-                                <span className="metric-num">450+</span>
-                                <span className="metric-label">Active Trucks</span>
-                            </div>
-                            <div className="metric-box">
-                                <span className="metric-num">99.8%</span>
-                                <span className="metric-label">On-Time Handoff</span>
-                            </div>
-                            <div className="metric-box">
-                                <span className="metric-num">18.4K</span>
-                                <span className="metric-label">Daily Scans</span>
-                            </div>
-                        </div>
-
-                        <div className="fleet-quote-box">
-                            <p className="quote-text">
-                                "The simplest and fastest scanner interface our dock crew has used. No delays, no missing crates."
-                            </p>
-                            <div className="quote-author">
-                                <div className="author-avatar">MV</div>
-                                <div className="author-info">
-                                    <span className="author-name">Marcus Vance</span>
-                                    <span className="author-role">Director of Fleet Logistics</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    aria-label="Transport freight truck"
+                />
             </div>
         </div>
     );
