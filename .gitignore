@@ -1,28 +1,172 @@
-# Python
+# ==============================================================================
+# FleetTrack OS - Git Ignore Configuration
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Environment Variables & Secrets (CRITICAL)
+# ------------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.template
+*.env
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# ------------------------------------------------------------------------------
+# Python & Virtual Environments
+# ------------------------------------------------------------------------------
+# Bytecode and cache
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-backend/venv/
-venv/
-ENV/
-env/
-*.db
-*.sqlite3
 
-# Node / Frontend
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+backend/venv/
+backend/.venv/
+backend/env/
+
+# Packaging and distribution
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing, typing, and linting
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.mypy_cache/
+.pytype/
+.pyre/
+.ruff_cache/
+
+# ------------------------------------------------------------------------------
+# Databases & Local Storage
+# ------------------------------------------------------------------------------
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.dump
+*.sql.bak
+postgres_data/
+
+# ------------------------------------------------------------------------------
+# Node.js, Frontend & Build Artifacts
+# ------------------------------------------------------------------------------
 node_modules/
+frontend/node_modules/
 dist/
 dist-ssr/
-*.local
+frontend/dist/
+frontend/dist-ssr/
+.vite/
+frontend/.vite/
 
-# Logs
+# TypeScript build info & cache
+*.tsbuildinfo
+frontend/tsconfig.tsbuildinfo
+
+# Package manager logs & temporary files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+
+# ------------------------------------------------------------------------------
+# General Logs & Diagnostic Outputs
+# ------------------------------------------------------------------------------
 logs/
 *.log
 
-# OS & Editors
-.DS_Store
-Thumbs.db
-.vscode/
+# ------------------------------------------------------------------------------
+# Docker & Local Overrides
+# ------------------------------------------------------------------------------
+docker-compose.override.yml
+.docker/
+
+# ------------------------------------------------------------------------------
+# IDEs & Editor Configurations
+# ------------------------------------------------------------------------------
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains / PyCharm / WebStorm
 .idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Editor temp / swap files
+*.swp
+*.swo
+*~
+*.bak
+
+# ------------------------------------------------------------------------------
+# Operating System Artifacts
+# ------------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.fuse_hidden*
+.directory
