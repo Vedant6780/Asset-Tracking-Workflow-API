@@ -63,7 +63,8 @@ app.add_middleware(
         "https://*.lovableproject.com",  # Lovable preview domains
         "https://*.lovable.app",         # Lovable app domains
         "http://localhost:8080",         # Additional localhost port
-        "https://localhost:8080",        # HTTPS localhost
+        "https://localhost:8080",  
+        "https://asset-tracking-workflow-api-1.onrender.com",# HTTPS 
     ],
     allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?|https://[\w-]+\.lovableproject\.com|https://[\w-]+\.lovable\.app",
     allow_credentials=True,
