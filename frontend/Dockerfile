@@ -2,8 +2,7 @@ FROM node:24.14.0 AS build
 
 WORKDIR /app
 
-# Add build argument for API URL
-ARG VITE_API_URL=http://localhost:8000
+ARG VITE_API_URL
 ENV VITE_API_URL=${VITE_API_URL}
 
 COPY package*.json ./
