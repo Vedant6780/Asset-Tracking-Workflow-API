@@ -171,22 +171,16 @@ export default function ManagerDashboard() {
                 </div>
 
                 {/* Table Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                <div className="dashboard-section-header">
                     <div>
                         <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>Active Shipments</h2>
                         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '2px 0 0' }}>
-                            Click any row to view its full audit history.
+                            Tap or click any shipment to inspect its complete audit trail.
                         </p>
                     </div>
-                    <span style={{
-                        fontSize: '0.76rem',
-                        color: 'var(--text-muted)',
-                        background: '#ffffff',
-                        padding: '5px 12px',
-                        borderRadius: 'var(--r-sm)',
-                        border: '1px solid var(--border)'
-                    }}>
-                        🟢 Real-time updates active
+                    <span className="live-pulse-badge">
+                        <span className="live-dot" />
+                        <span>Live Sync Active</span>
                     </span>
                 </div>
 

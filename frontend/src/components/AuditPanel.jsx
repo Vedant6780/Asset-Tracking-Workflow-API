@@ -62,18 +62,16 @@ export default function AuditPanel({ assetId, onClose }) {
                         </div>
 
                         {/* Current Status */}
-                        <div style={{ marginBottom: 'var(--space-xl)', padding: 'var(--space-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}>
-                            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
-                                Current Status
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div className="audit-status-summary">
+                            <div className="audit-status-label">Current Status</div>
+                            <div className="audit-status-details">
                                 <StatusBadge status={asset.status} />
-                                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{asset.location}</span>
+                                <span className="audit-status-location">📍 {asset.location || 'Warehouse Intake'}</span>
                             </div>
                         </div>
 
                         {/* Timeline */}
-                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 'var(--space-md)' }}>
+                        <div className="audit-timeline-heading">
                             Audit History ({asset.audit_logs?.length || 0} events)
                         </div>
 

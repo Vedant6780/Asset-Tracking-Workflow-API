@@ -163,10 +163,23 @@ export default function OperatorDashboard() {
                         </button>
                     </form>
 
-                    <div style={{ marginTop: '10px', textAlign: 'center' }}>
-                        <span style={{ fontSize: '0.74rem', color: 'var(--text-light)' }}>
-                            💡 Try demo serials: <strong>SN-9982</strong>, <strong>SN-7721</strong>, or <strong>SN-4410</strong>
-                        </span>
+                    <div className="demo-serials-box">
+                        <span className="demo-serials-label">💡 Tap to test demo serials:</span>
+                        <div className="demo-chips-group">
+                            {['SN-9982', 'SN-7721', 'SN-4410'].map((sn) => (
+                                <button
+                                    key={sn}
+                                    type="button"
+                                    className="demo-chip-btn"
+                                    onClick={() => {
+                                        setSerialInput(sn);
+                                        setError('');
+                                    }}
+                                >
+                                    {sn}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Error */}
@@ -179,7 +192,7 @@ export default function OperatorDashboard() {
                     {/* Asset Info & Update */}
                     {asset && (
                         <div className="asset-info-card">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                            <div className="asset-info-top-row">
                                 <div>
                                     <div className="asset-name">{asset.name}</div>
                                     <div className="asset-detail" style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 600 }}>
